@@ -1,15 +1,28 @@
-/* stack1-stdin.c                               *
- * specially crafted to feed your brain by gera */
-
 #include <stdio.h>
+#include <string.h>
+
+#define BUFFER_SIZE 80
 
 int main() {
-    int cookie;
-    char buf[80];
+    char buf[BUFFER_SIZE];
 
-    printf("buf: %08x cookie: %08x\n", &buf, &cookie);
-    gets(buf);
+    printf("Enter input: ");
 
-    if (cookie == 0x41424344)
-        printf("you win!\n");
+    if (fgets(buf, BUFFER_SIZE, stdin) == NULL) {
+        printf("Input error occurred\n");
+        return 1;
+    }
+
+    // remove newline safely
+    buf[strcspn(buf, "\n")] = 0;
+
+    // validate input
+    if (strlen(buf) == 0) {
+        printf("Invalid input: empty string\n");
+        return 1;
+    }
+
+    printf("Securely processed input: %s\n", buf);
+
+    return 0;
 }
